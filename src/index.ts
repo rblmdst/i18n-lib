@@ -49,13 +49,15 @@ export const load = () => {
   if (!languages) {
     throw new Error("The languages is required");
   } else if (!languages.length) {
-    throw new Error("The languages is required");
+    throw new Error(
+      "The languages can't be an empty array. You must specify at least one language."
+    );
   } else {
     const containsNonString = languages.some(
       (langKey) => typeof langKey !== "string"
     );
     if (containsNonString) {
-      throw new Error("The languages is required");
+      throw new Error("The languages must be an array of string");
     }
   }
 
@@ -64,7 +66,7 @@ export const load = () => {
       throw new Error("The defaultLanguage must be a string");
     } else if (!languages.includes(defaultLanguage)) {
       throw new Error(
-        "The defaultLanguage must take of the follwing values : ['en']"
+        "The defaultLanguage must take of the following values : ['en']"
       );
     }
   } else {
@@ -104,7 +106,11 @@ export const load = () => {
   });
   console.log("Language files successfully loaded.");
 };
-export const i18n = (key: string, lang?: string) => {
+export const i18n = (
+  key: string,
+  lang?: string,
+  props?: { [k: string]: any }
+) => {
   if (!lib._config) {
     throw new Error(
       "Not config found please call the setUp function to set the config before calling the i18n function"
@@ -116,8 +122,23 @@ export const i18n = (key: string, lang?: string) => {
       ? lib._config.defaultLanguage
       : lang;
 
-  // TODO: manage case props
-  return lib._langData[i18nLang][key] || key;
+  let translatedString = lib._langData[i18nLang][key];
+  if (translatedString) {
+    if (props) {
+      if (typeof props !== "object") {
+        throw new Error("The prop must be an object (i.e key-value pair)");
+      }
+
+      for (let key in props) {
+        translatedString = translatedString.replace(
+          new RegExp(`{{${key}}}`, "g"),
+          props[key]
+        );
+      }
+    }
+    return translatedString;
+  }
+  return key;
 };
 
 export const setDefaultLang = (lang: string) => {
@@ -127,7 +148,9 @@ export const setDefaultLang = (lang: string) => {
   if (typeof lang !== "string") {
     throw new Error("The  new defaultlang must be a string");
   } else if (!lib._config.languages.includes(lang)) {
-    throw new Error("The lang must take of the follwing values : ['en']");
+    throw new Error(
+      "The lang is invalid. The lang must take of the following values : ['en']"
+    );
   }
   lib._config.defaultLanguage = lang;
 };
