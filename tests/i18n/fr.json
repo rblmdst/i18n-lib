@@ -1,0 +1,5 @@
+{
+  "username": "Nom d'utilisateur",
+  "i_x_years": "J'ai {{age}} ans.",
+  "test": "age: {{age}} Nom: {{name}} age: {{age}}."
+}
