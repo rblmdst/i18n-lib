@@ -191,10 +191,8 @@ describe("", () => {
       });
 
       it("when a json file corresponding to a language does not contains a valid json", () => {
-        const filePath = path.join(i18nFilesDirPath, "ch.json");
-
-        const expectedErrMsg = `An error happened when parsing the file ${"ch"}.json (${filePath}).`;
-
+        // const filePath = path.join(i18nFilesDirPath, "ch.json");
+        // const expectedErrMsg = `An error happened when parsing the file ${"ch"}.json (${filePath}).`;
         setUp({ path: i18nFilesDirPath, languages: ["en", "ch", "fr"] });
         // const spy = jest.spyOn(console, "log");
         // expect(spy).toHaveBeenCalledWith(expectedErrMsg);

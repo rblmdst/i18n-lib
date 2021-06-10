@@ -2,17 +2,17 @@ Simple internationalization library for Node.JS
 
 ## Install
 
-`npm install `
+`npm install @rblmdt/i18n-lib`
 
 ## Usage
 
-1 - Create a translation folder and files
-Start by creating a folder that will contains the translation files
-A transalation file is a json file which contains a key-value pairs
-the key represent the translation key which will later be passed to the translation function
-the value represent the translated text
+1 - **Create a translation folder and files**
 
-By assuming that we want to support English and French and we want to put our translation files under the folder `i18n` let's create the `en.json` and `fr.json` files
+Start by creating a folder that will contains the translation files.
+
+A translation file is a `.json` file which contains a _key-value_ pairs, the key represents the _translation key_ (which will later be passed to the translation function), the value represents the translated text.
+
+By assuming that we want to support _English_ and _French_ and that we want to put our translation files under the folder `i18n` let's create the `en.json` and `fr.json` files
 
 ```json
 // i18n/en.json
@@ -21,6 +21,8 @@ By assuming that we want to support English and French and we want to put our tr
   "i_x_years": "I am {{age}} old.",
   "test": "age: {{age}} Name: {{name}} age: {{age}}."
 }
+
+
 // i18n/fr.json
 {
   "username": "Nom d'utilisateur",
@@ -29,12 +31,13 @@ By assuming that we want to support English and French and we want to put our tr
 }
 ```
 
-2 - Configure and load translation files
+2 - **Configure and load translation files**
 
 Now we have to tell the library where to find the translation files and the supported languages.
+
 We do that by calling the `setup()` function
 
-The setup function take as a parameter a configuration that is an simple Javascript Object
+The setup function takes as a parameter a configuration that is a simple _Javascript Object_
 with the following schema
 
 ```ts
@@ -45,16 +48,17 @@ interface Config {
 }
 ```
 
-- `path`: the absolute path to folder that contains the translation files
-- `languages`: the array of the supported languages, eg: `["en", "fr", "it"]`. A translation file should be present in the `path` for each supported language.
-- `defaultLanguage`: the language into which to translate when the i18n is called without specifying a language. If not specified its value will be the first item of the `languages` array.
+- `path` : the absolute path to folder that contains the translation files;
+- `languages` : the array of the supported languages, eg : `["en", "fr", "it"]`. A translation file should be present in the `path` for each supported language.
+- `defaultLanguage` : the language into which to translate when the `i18n()` function is called without specifying a language. If not specified its value will be the first item of the `languages` array.
 
 After the setup is done you have to call the `load()` function which will load the translation files.
 
 ```js
 // index.js
-import * as path from "path";
-import { setUp, load, i18n } from "__";
+const i18nLib = require("@rblmdt/i18n-lib");
+const path = require("path");
+const { i18n, load, setUp } = i18nLib;
 
 const config = {
   path: path.join(__dirname, "i18n"),
@@ -67,16 +71,16 @@ setUp(config);
 // load the translation files
 load();
 
-// translation
+// text translation
 i18n("username"); // "Username"
 i18n("username", "fr"); // "Nom d'utilisateur"
 
 i18n("i_x_years", "en", { age: 10 }); // "I am 10 old."
 ```
 
-3 - translation
+3 - **Translation**
 
-As you may have already noticed it in the previous snippet, after the setup and the translation files loaded you just have to call the `i18n()` function with one of the translation key you have defined in the translation files and the desired language key (not required) to get the translated text.
+As you may have already noticed it in the previous snippet, after the setup and the translation files loaded you just have to call the `i18n()` function passing it one of the _translation key_ you have defined in the translation files and the desired language key (not required) in order to get the translated text.
 
 ```js
 // simple text sepecifying the language
@@ -90,14 +94,15 @@ i18n("username", "fr"); // "Nom d'utilisateur"
 i18n("i_x_years", "en", { age: 10 }); // "I am 10 old."
 ```
 
-4 - Change the default language
+4 - **Change the default language**
 
 After the setup you can call the `setDefaultLanguage()` function at any time during the application execution to update the default language.
 
 ```js
 // index.js
-import * as path from "path"
-import { setUp, load, i18n } from "__"
+const i18nLib = require("@rblmdt/i18n-lib");
+const path = require("path");
+const { i18n, load, setUp } = i18nLib;
 
 const config = {
   path: path.join(__dirname, "i18n");
@@ -143,3 +148,13 @@ i18n("username") // "Username"
   Should be called just after the `setUp()` and `load()` functions.
 
 ## Examples
+
+- [eg 1](examples/simple)
+
+- eg 2 (TODO)
+
+  Add example on how to used it with `express.js` here.
+
+## License
+
+MIT © [Modeste ASSIONGBON](https://github.com/rblmdst/)
